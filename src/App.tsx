@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as $ from 'jquery';
-import './App.css';
+import './App.scss';
 
 export default class App extends React.Component {
 
@@ -26,7 +26,7 @@ export default class App extends React.Component {
     const {state} = this;
     const data = state && (state as any).data;
     return (
-      <div className="App">
+      <div className="foo">
         {data? <div>{JSON.stringify(data)}</div> : <div>No data</div>}
       </div>
     );
