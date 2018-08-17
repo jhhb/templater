@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as $ from 'jquery';
 import './App.css';
 
 export default class App extends React.Component {
@@ -9,13 +10,16 @@ export default class App extends React.Component {
   }
 
   public async componentDidMount() {
-    const res = await this.fetch();
-    const data = await res.json();
+    const data = await this.fetch();
     this.setState({data});
   }
 
   public async fetch() {
-    return await fetch('https://jsonplaceholder.typicode.com/todos/1');
+    return await new Promise((resolve, reject) => {
+      $.getJSON('https://jsonplaceholder.typicode.com/todos/1')
+        .fail((data) => reject(data))
+        .then((data) => resolve(data));
+    })
   }
 
   public render() {
@@ -24,13 +28,6 @@ export default class App extends React.Component {
     return (
       <div className="App">
         {data? <div>{JSON.stringify(data)}</div> : <div>No data</div>}
-        {/*<header className="App-header">*/}
-          {/*<img src={logo} className="App-logo" alt="logo"/>*/}
-          {/*<h1 className="App-title">Welcome to React</h1>*/}
-        {/*</header>*/}
-        {/*<p className="App-intro">*/}
-          {/*To get started, edit <code>src/App.tsx</code> and save to reload.*/}
-        {/*</p>*/}
       </div>
     );
   }
