@@ -13,28 +13,42 @@ export class TicketsPageState {
   @observable numMinuses: number = 3;
   @observable numTodos: number = 1;
   @observable numImprovements: number = 3;
-  @observable ticketId: null;
+  @observable ticketId?: string;
 
   @action("<TicketsPageStore#toggleEditing>")
-  toggleEditing = () => {
+  toggleEditing = (): void => {
     this.isEditing = !this.isEditing;
   }
 
   @computed
-  get isNew() {
+  get isNew(): boolean {
     return !this.ticketId;
   }
 
   @action("<TicketsPageStore#incrementType>")
-  handleIncrement = (type: IncrementableType) => {
+  handleIncrement = (type: IncrementableType): void => {
     this[type] +=1;
   }
 
   @action("<TicketsPageStore#decrementType>")
-  handleDecrement = (type: IncrementableType) => {
+  handleDecrement = (type: IncrementableType): void => {
     if (this[type] === 1) {
       return
     }
     this[type] -=1;
   }
+
+  @action('<TicketsPageStore#setTicketId>')
+  setTicketId = (ticketId?: string) => this.ticketId = ticketId;
+
+  @action('<TicketsPageStore#handleSave>')
+  handleSave = () => {
+    this.isEditing = false;
+  };
+
+  @action('<TicketsPageStore#handleEdit>')
+  handleEdit = () => {
+    this.isEditing = true;
+  };
+
 }

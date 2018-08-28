@@ -32,7 +32,10 @@ const App = () => {
       </Navbar>
       <div className="main">
         <Provider state={ticketsPageState}>
-          <Route path="/tickets" component={TicketsPage}/>
+          <div>
+            <Route path="/tickets/" exact={true} component={TicketsPage}/>
+            <Route path="/tickets/:ticketId" component={TicketsPage}/>
+          </div>
         </Provider>
       </div>
     </div>

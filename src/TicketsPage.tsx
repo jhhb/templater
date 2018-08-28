@@ -1,16 +1,16 @@
 import {Button, ButtonGroup, FormGroup, InputGroup, TextArea} from '@blueprintjs/core';
+import {action} from 'mobx';
 import {inject, observer} from 'mobx-react';
 import * as React from 'react';
+import {Link} from 'react-router-dom';
 
 import './TicketsPage.scss';
 import {IncrementableType, TicketsPageState} from './states/TicketsPageState';
 
 interface IInputListProps {
   number: number;
-  handleIncrement: (type: IncrementableType) => void;
   handleDecrement: (type: IncrementableType) => void;
   type: IncrementableType;
-  key: string;
 }
 
 @inject('state') @observer
@@ -19,12 +19,22 @@ export class TicketsPage extends React.Component<{state: TicketsPageState}> {
     super(props);
   }
 
-  buttonsForStatus() {
+  @action('<TicketsPage#componentDidMount>')
+  componentDidMount(): void {
+    this.props.state.setTicketId(this.props.match.params.ticketId);
+  }
+
+  buttonsForStatus(): JSX.Element {
     const {state} = this.props;
+    const button = state.isEditing ?
+      <Button text="Save" onClick={state.handleSave}/> :
+      <Button text="Edit" onClick={state.handleEdit}/>;
     return (
       <ButtonGroup>
-        {!state.isNew && <Button text={`${state.isEditing ? 'Cancel' : 'Edit'}`}/>}
-        {state.isNew && <Button text="Save"/>}
+        <Link to="/tickets">
+          <Button text="New"/>
+        </Link>
+        {!state.isNew && button}
       </ButtonGroup>
     )
   }
@@ -45,37 +55,33 @@ export class TicketsPage extends React.Component<{state: TicketsPageState}> {
             <FormGroup label="URL">
               <InputGroup/>
             </FormGroup>
-            <FormGroup label="Pluses">
-              <InputList
-                number={state.numPluses}
-                handleIncrement={state.handleIncrement}
-                handleDecrement={state.handleDecrement}
-                type={IncrementableType.PLUSES}
-              />
+            <FormGroup>
+              <div className="top-row">
+                <Button icon="plus" onClick={action(() => state.handleIncrement(IncrementableType.PLUSES))}/>
+                <FormLabel label="Pluses"/>
+              </div>
+              <InputList number={state.numPluses} handleDecrement={state.handleDecrement} type={IncrementableType.PLUSES}/>
             </FormGroup>
-            <FormGroup label="Minuses">
-              <InputList
-                number={state.numMinuses}
-                handleIncrement={state.handleIncrement}
-                handleDecrement={state.handleDecrement}
-                type={IncrementableType.MINUSES}
-              />
+            <FormGroup>
+              <div className="top-row">
+                <Button icon="plus" onClick={action(() => state.handleIncrement(IncrementableType.MINUSES))}/>
+                <FormLabel label="Minuses"/>
+              </div>
+              <InputList number={state.numMinuses} handleDecrement={state.handleDecrement} type={IncrementableType.MINUSES}/>
             </FormGroup>
-            <FormGroup label="TODOs">
-              <InputList
-                number={state.numTodos}
-                handleIncrement={state.handleIncrement}
-                handleDecrement={state.handleDecrement}
-                type={IncrementableType.TODOS}
-              />
+            <FormGroup>
+              <div className="top-row">
+                <Button icon="plus" onClick={action(() => state.handleIncrement(IncrementableType.TODOS))}/>
+                <FormLabel label="TODOs"/>
+              </div>
+              <InputList number={state.numTodos} handleDecrement={state.handleDecrement} type={IncrementableType.TODOS}/>
             </FormGroup>
-            <FormGroup label="Improvements">
-              <InputList
-                number={state.numImprovements}
-                handleIncrement={state.handleIncrement}
-                handleDecrement={state.handleDecrement}
-                type={IncrementableType.IMPROVEMENTS}
-              />
+            <FormGroup>
+              <div className="top-row">
+                <Button icon="plus" onClick={action(() => state.handleIncrement(IncrementableType.IMPROVEMENTS))}/>
+                <FormLabel label="Improvements"/>
+              </div>
+              <InputList number={state.numImprovements} handleDecrement={state.handleDecrement} type={IncrementableType.IMPROVEMENTS}/>
             </FormGroup>
             <FormGroup label="General comments">
               <TextArea fill={true}/>
@@ -110,8 +116,14 @@ const InputList = (props: IInputListProps): JSX.Element => {
             </div>
           );
       })}
-      <Button icon="plus" onClick={() => props.handleIncrement(type)} key={keyPrefix + '-plus'}/>
     </div>
   );
 }
 
+const FormLabel = (props: {label: string}) => {
+  return (
+    <label className="pt-label">
+      {props.label}
+    </label>
+    );
+}
