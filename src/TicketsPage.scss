@@ -12,6 +12,13 @@ $width: 600px;
     outline: none;
   }
 
+  .button-controls {
+    padding: 10px;
+    button {
+      margin-right: 10px;
+    }
+  }
+
   .content {
     padding: 20px 10px 0 10px;
     border-left: 1px solid lightgray;

@@ -30,12 +30,14 @@ export class TicketsPage extends React.Component<{state: TicketsPageState}> {
       <Button text="Save" onClick={state.handleSave}/> :
       <Button text="Edit" onClick={state.handleEdit}/>;
     return (
-      <ButtonGroup>
-        <Link to="/tickets">
-          <Button text="New"/>
-        </Link>
-        {!state.isNew && button}
-      </ButtonGroup>
+      <div className="button-controls">
+        <ButtonGroup>
+          <Link to="/tickets">
+            <Button text="New"/>
+          </Link>
+          {!state.isNew && button}
+        </ButtonGroup>
+      </div>
     )
   }
 
@@ -49,10 +51,16 @@ export class TicketsPage extends React.Component<{state: TicketsPageState}> {
         <div className="content">
           <div className="ticket-form">
             {this.buttonsForStatus()}
-            <FormGroup label="Description">
+            <FormGroup>
+              <div className="top-row">
+                <FormLabel label="Description"/>
+              </div>
               <InputGroup/>
             </FormGroup>
-            <FormGroup label="URL">
+            <FormGroup>
+              <div className="top-row">
+                <FormLabel label="URL"/>
+              </div>
               <InputGroup/>
             </FormGroup>
             <FormGroup>
@@ -83,7 +91,10 @@ export class TicketsPage extends React.Component<{state: TicketsPageState}> {
               </div>
               <InputList number={state.numImprovements} handleDecrement={state.handleDecrement} type={IncrementableType.IMPROVEMENTS}/>
             </FormGroup>
-            <FormGroup label="General comments">
+            <FormGroup>
+              <div className="top-row">
+                <FormLabel label="General Comments"/>
+              </div>
               <TextArea fill={true}/>
             </FormGroup>
           </div>
